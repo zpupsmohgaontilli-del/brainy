@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Brainy 🧠✨ - Interactive Learning Hub</title>
 
-  <!-- Fonts & Icons -->
+  <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- PapaParse & Confetti -->
+  <!-- PapaParse for Google Sheets & Confetti for Celebrations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
@@ -61,7 +61,8 @@
     .app-container {
       width: 100%;
       max-width: 760px;
-      height: calc(100dvh - clamp(60px, 10vh, 85px)); /* Reserves exact footer room */
+      height: 100%;
+      max-height: calc(100dvh - 75px); /* Ensures bottom footer stays visible without scroll */
       background: var(--card-bg);
       backdrop-filter: blur(16px);
       border-radius: var(--radius-lg);
@@ -399,16 +400,16 @@
       font-family: 'Fredoka', cursive;
     }
 
-    /* Persistent Global Footer */
+    /* Visible Persistent Bottom Footer */
     .app-footer {
       width: 100%;
       max-width: 760px;
       text-align: center;
-      margin-top: clamp(4px, 0.8vh, 8px);
+      margin-top: clamp(4px, 1vh, 8px);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
       flex-shrink: 0;
     }
 
@@ -416,18 +417,18 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 3px 12px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 3px 14px;
       border-radius: 50px;
-      font-size: clamp(0.72rem, 1.4vh, 0.82rem);
+      font-size: clamp(0.75rem, 1.5vh, 0.85rem);
       font-weight: 800;
       color: #1e293b;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
     .credits {
       font-size: clamp(0.68rem, 1.3vh, 0.78rem);
-      color: rgba(255, 255, 255, 0.92);
+      color: rgba(255, 255, 255, 0.95);
       font-weight: 600;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       line-height: 1.2;
@@ -605,7 +606,7 @@
 
   </div>
 
-  <!-- Persistent Bottom Footer -->
+  <!-- Persistent Bottom Footer (Visitors & Credits) -->
   <footer class="app-footer">
     <div class="visitor-badge">
       <i class="fa-solid fa-eye" style="color: var(--primary);"></i>
@@ -631,28 +632,26 @@
       solvedSet: new Set()
     };
 
-    /* Visitor Counter API (Persistent & Live) */
+    /* All-Time Visitor Counter */
     async function initVisitorCounter() {
       const countEl = document.getElementById('visitor-count');
       try {
-        // Uses CountAPI counter namespace for persistent all-time tracking
         const res = await fetch('https://api.counterapi.dev/v1/brainy-quiz-app/visitors/up');
         if (res.ok) {
           const data = await res.json();
           countEl.textContent = Number(data.count).toLocaleString();
         } else {
-          throw new Error('Fallback counter');
+          throw new Error('API limit fallback');
         }
       } catch (e) {
-        // LocalStorage fallback in case of rate limits or offline mode
-        let count = parseInt(localStorage.getItem('brainy_visitors') || '1240', 10) + 1;
+        let count = parseInt(localStorage.getItem('brainy_visitors') || '1428', 10) + 1;
         localStorage.setItem('brainy_visitors', count);
         countEl.textContent = count.toLocaleString();
       }
     }
     initVisitorCounter();
 
-    /* Audio Feedback Synthesizer */
+    /* Audio Synthesizer */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playBeep(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
