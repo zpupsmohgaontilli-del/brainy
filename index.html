@@ -296,7 +296,6 @@
       to { transform: scale(1.08); }
     }
 
-    /* Prominent Big Question Box */
     .question-box {
       margin: clamp(4px, 0.8vh, 8px) 0;
       background: linear-gradient(135deg, #f8fafc, #eef2ff);
@@ -316,14 +315,13 @@
     }
 
     .question-box h2 {
-      font-size: clamp(1.05rem, 2.5vh, 1.35rem); /* Noticeably bigger */
+      font-size: clamp(1.05rem, 2.5vh, 1.35rem);
       color: #0f172a;
       font-weight: 800;
       line-height: 1.4;
       user-select: text;
     }
 
-    /* Smaller, Colorful Compact Option Buttons */
     .options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -345,8 +343,8 @@
       background: #ffffff;
       border: 2px solid #e2e8f0;
       border-radius: var(--radius-md);
-      padding: clamp(5px, 1vh, 9px) clamp(8px, 1.2vw, 12px); /* Compact padding */
-      font-size: clamp(0.78rem, 1.55vh, 0.92rem);           /* Noticeably smaller text */
+      padding: clamp(5px, 1vh, 9px) clamp(8px, 1.2vw, 12px);
+      font-size: clamp(0.78rem, 1.55vh, 0.92rem);
       font-weight: 700;
       cursor: pointer;
       text-align: left;
@@ -361,7 +359,6 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     }
 
-    /* Option Distinct Color Ribbons */
     .option-btn.opt-a .opt-label { background: var(--opt-a); color: white; }
     .option-btn.opt-b .opt-label { background: var(--opt-b); color: white; }
     .option-btn.opt-c .opt-label { background: var(--opt-c); color: #1e293b; }
@@ -460,7 +457,7 @@
       font-family: 'Fredoka', cursive;
     }
 
-    /* Visible Persistent Bottom Footer */
+    /* Bottom Footer */
     .app-footer {
       width: 100%;
       max-width: 760px;
@@ -532,7 +529,7 @@
     <div id="loader" class="loader-overlay">
       <div class="spinner"></div>
       <h3 style="color: #6366f1; font-size: 1.2rem;">Loading Questions... 🚀</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem;">Fetching live questions from Google Sheets</p>
+      <p style="color: var(--text-muted); font-size: 0.85rem;">Fetching live questions from Sheet</p>
     </div>
 
     <!-- Screen 1: Welcome -->
@@ -680,8 +677,17 @@
   </footer>
 
   <script>
-    /* Google Spreadsheet Document ID & Endpoints */
-    const PUB_ID = "2PACX-1vTdL3NfpqkSRPWargMTcQ_qSXOPb64Y5ottEfSEY1ro62Es62B3ow5kYJ6SdkhuCAKskVRi8MQD3zPu";
+    /* Google Spreadsheet Base Configuration */
+    const SHEET_BASE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdL3NfpqkSRPWargMTcQ_qSXOPb64Y5ottEfSEY1ro62Es62B3ow5kYJ6SdkhuCAKskVRi8MQD3zPu/pub?output=csv";
+
+    /* Specific GIDs for 4 Different Sheets/Tabs of the Single Spreadsheet.
+       Replace placeholder GIDs below with your actual sheet GIDs if customized. */
+    const SUBJECT_GIDS = {
+      'Marathi': '0',         // Tab 1 (Marathi)
+      'English': '966168279', // Replace with your English tab GID if different
+      'Maths':   '999123241', // Replace with your Maths tab GID if different
+      'GMA':     '1258690065'  // Replace with your GMA tab GID if different
+    };
 
     const state = {
       userName: '',
@@ -697,7 +703,7 @@
     /* Realistic All-Time Visitor Counter */
     function initVisitorCounter() {
       const countEl = document.getElementById('visitor-count');
-      const BASE_REALISTIC_VISITORS = 142; // Grounded baseline for school students
+      const BASE_REALISTIC_VISITORS = 142;
       let storedCount = localStorage.getItem('brainy_school_visitors');
       
       if (!storedCount) {
@@ -711,7 +717,7 @@
     }
     initVisitorCounter();
 
-    /* Rich Web Audio Synthesizer (Chimes, Clicks, Buzzers, Fanfare) */
+    /* Web Audio Synthesizer */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
     function playSound(type) {
@@ -719,8 +725,7 @@
       const now = audioCtx.currentTime;
 
       if (type === 'correct') {
-        // Melodic 3-tone chime for kids
-        [523.25, 659.25, 783.99].forEach((freq, i) => { // C5, E5, G5
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
@@ -734,7 +739,6 @@
           osc.stop(now + (i * 0.08) + 0.35);
         });
       } else if (type === 'wrong') {
-        // Soft cartoon 'boing/buzz'
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sawtooth';
@@ -747,7 +751,6 @@
         osc.start(now);
         osc.stop(now + 0.25);
       } else if (type === 'fanfare') {
-        // Grand victory chord
         [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
@@ -761,7 +764,6 @@
           osc.stop(now + 0.8);
         });
       } else {
-        // Pop click
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
@@ -794,7 +796,7 @@
       switchScreen('screen-subjects');
     });
 
-    /* Live Data Fetching */
+    /* Live Data Fetching across Distinct Sheet Tabs */
     async function selectSubject(subject) {
       state.currentSubject = subject;
       state.userAnswers = {};
@@ -804,13 +806,18 @@
       showLoader(true);
       playSound('click');
 
-      const primaryUrl = `https://docs.google.com/spreadsheets/d/e/${PUB_ID}/pub?output=csv&sheet=${encodeURIComponent(subject)}`;
-      const fallbackUrl = `https://docs.google.com/spreadsheets/d/e/${PUB_ID}/pub?output=csv`;
+      const gid = SUBJECT_GIDS[subject] || '0';
+      const urlWithGid = `${SHEET_BASE_CSV}&gid=${gid}`;
+      const urlNamedSheet = `${SHEET_BASE_CSV}&sheet=${encodeURIComponent(subject)}`;
+      const urlDefault = `${SHEET_BASE_CSV}`;
 
-      fetchCSV(primaryUrl, subject, () => {
-        fetchCSV(fallbackUrl, subject, () => {
-          showLoader(false);
-          alert(`❌ Could not load questions for "${subject}". Please verify that your sheet tab is published as CSV with columns: Question, OptionA, OptionB, OptionC, OptionD, Answer.`);
+      // Cascade fetch attempts: GID -> Named Tab -> Default Sheet
+      fetchCSV(urlWithGid, subject, () => {
+        fetchCSV(urlNamedSheet, subject, () => {
+          fetchCSV(urlDefault, subject, () => {
+            showLoader(false);
+            alert(`❌ Could not load questions for "${subject}". Please verify your spreadsheet publish settings and column headers.`);
+          });
         });
       });
     }
@@ -951,7 +958,6 @@
 
       if (selectedOption === correctOption) {
         playSound('correct');
-        // Cheerful colorful burst
         confetti({ 
           particleCount: 45, 
           spread: 70, 
@@ -1045,7 +1051,6 @@
         titleEl.textContent = `Brilliant Job, ${state.userName}! 🌟`;
         badgeEl.textContent = '🏆';
         subEl.textContent = 'You are a certified Super Brain champion!';
-        // Grand celebratory double-blast
         confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
         setTimeout(() => confetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } }), 250);
       } else if (accuracy >= 50) {
