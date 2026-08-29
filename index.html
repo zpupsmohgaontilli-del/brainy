@@ -57,7 +57,7 @@
     }
 
     .app-container {
-      width: min(96%, 900px);
+      width: min(96%, 920px);
       height: 100%;
       max-height: calc(100dvh - 68px);
       background: var(--glass-bg);
@@ -110,7 +110,7 @@
       margin-bottom: clamp(8px, 1.5vh, 14px);
     }
 
-    /* Welcome Box */
+    /* Welcome Screen */
     .welcome-box {
       margin: auto;
       width: 100%;
@@ -192,7 +192,7 @@
       color: #ffffff;
     }
 
-    /* 2x2 Subject Cards */
+    /* Subject Cards (2x2) */
     .user-greeting {
       display: flex;
       align-items: center;
@@ -286,7 +286,7 @@
       border: 1.5px solid #e2e8f0;
       border-radius: 0.65rem;
       padding: clamp(0.25rem, 0.6vh, 0.5rem) clamp(0.5rem, 1vw, 0.8rem);
-      margin-bottom: clamp(0.3rem, 0.8vh, 0.6rem);
+      margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -318,24 +318,24 @@
       transition: width 1s linear;
     }
 
-    /* Enhanced Large Question Box */
+    /* Question Box */
     .question-box {
-      font-size: clamp(0.95rem, 2.2vh, 1.35rem);
+      font-size: clamp(0.95rem, 2.2vh, 1.3rem);
       font-weight: 700;
       line-height: 1.3;
       color: #1e293b;
-      margin-bottom: clamp(0.35rem, 1vh, 0.7rem);
+      margin-bottom: clamp(0.35rem, 0.9vh, 0.6rem);
       background: #f8fafc;
       border: 1.5px solid #e2e8f0;
       border-left: 5px solid #6366f1;
-      padding: clamp(8px, 1.5vh, 14px);
+      padding: clamp(8px, 1.4vh, 12px);
       border-radius: 0.75rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      min-height: 24%;
-      max-height: 50%; /* Extended to host prominent images */
+      min-height: 18%;
+      max-height: 42%;
       overflow-y: auto;
       flex-shrink: 0;
     }
@@ -346,19 +346,18 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: clamp(4px, 0.8vh, 8px);
+      margin-top: clamp(4px, 0.6vh, 8px);
       cursor: zoom-in;
     }
 
-    /* Prominent image sizing */
     .question-img {
       width: auto;
       max-width: 100%;
       height: auto;
-      max-height: clamp(140px, 28vh, 260px); /* Up to 260px clearly visible */
+      max-height: clamp(120px, 24vh, 220px);
       object-fit: contain;
       border-radius: 0.65rem;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
       border: 1.5px solid #cbd5e1;
       background: #ffffff;
       padding: 4px;
@@ -371,13 +370,13 @@
 
     .zoom-hint {
       position: absolute;
-      bottom: 8px;
-      right: 12px;
+      bottom: 6px;
+      right: 10px;
       background: rgba(15, 23, 42, 0.75);
       color: #ffffff;
       padding: 3px 8px;
       border-radius: 50px;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       pointer-events: none;
       display: flex;
@@ -385,30 +384,31 @@
       gap: 4px;
     }
 
-    /* Options Grid */
+    /* Options Grid (Auto Scales for Images vs Text) */
     .options-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: clamp(0.35rem, 1vh, 0.7rem);
-      margin-bottom: clamp(0.35rem, 1vh, 0.8rem);
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(0.4rem, 1vh, 0.75rem);
+      margin-bottom: clamp(0.35rem, 0.9vh, 0.7rem);
       flex-grow: 1;
       min-height: 0;
+      overflow-y: auto;
     }
 
-    @media (min-width: 650px) {
+    @media (max-width: 540px) {
       .options-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
       }
     }
 
     .option-btn {
       width: 100%;
       text-align: left;
-      padding: clamp(0.4rem, 1vh, 0.75rem) clamp(0.6rem, 1.2vw, 0.95rem);
+      padding: clamp(0.45rem, 1vh, 0.75rem) clamp(0.6rem, 1.2vw, 0.9rem);
       background: #ffffff;
       border: 2px solid #e2e8f0;
-      border-radius: clamp(0.45rem, 1vh, 0.75rem);
-      font-size: clamp(0.82rem, 1.6vh, 1rem);
+      border-radius: clamp(0.5rem, 1.2vh, 0.8rem);
+      font-size: clamp(0.85rem, 1.7vh, 1.05rem);
       font-weight: 600;
       color: #334155;
       cursor: pointer;
@@ -416,24 +416,81 @@
       align-items: center;
       justify-content: space-between;
       transition: all 0.15s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      height: 100%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+      position: relative;
+      min-height: clamp(44px, 7vh, 65px);
     }
 
     .option-btn:hover:not(:disabled) {
       border-color: #6366f1;
       background: #f8fafc;
       transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.12);
+    }
+
+    /* Big Image-Centric Option Card Styling */
+    .option-btn.has-opt-image {
+      min-height: clamp(75px, 13vh, 120px);
+      padding: clamp(6px, 1vh, 10px);
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .opt-content-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .opt-label-tag {
+      font-weight: 800;
+      color: #4338ca;
+      font-size: clamp(0.85rem, 1.7vh, 1.05rem);
+      flex-shrink: 0;
+    }
+
+    .opt-img-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      flex-shrink: 0;
+      border-radius: 8px;
+      padding: 3px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      cursor: zoom-in;
     }
 
     .option-img {
-      max-height: clamp(40px, 6vh, 65px);
+      max-height: clamp(55px, 9.5vh, 95px); /* Increased from 45px to up to 95px */
+      max-width: clamp(80px, 18vw, 150px);
       width: auto;
+      height: auto;
       object-fit: contain;
       border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      cursor: zoom-in;
+      transition: transform 0.15s ease;
+    }
+
+    .opt-img-container:hover .option-img {
+      transform: scale(1.05);
+    }
+
+    .opt-zoom-icon {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: rgba(15, 23, 42, 0.7);
+      color: #ffffff;
+      font-size: 0.6rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      pointer-events: none;
     }
 
     .option-btn.correct {
@@ -782,7 +839,7 @@
       solvedSet: new Set()
     };
 
-    /* Helper: Extract text and image link */
+    /* Robust Image & Text Extractor */
     function extractImageAndText(rawString) {
       let text = String(rawString || '').trim();
       const imgRegex = /(https?:\/\/(?:i\.ibb\.co|ibb\.co)[^\s]+|https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|webp|gif|svg))/i;
@@ -1014,7 +1071,7 @@
       return score;
     }
 
-    /* Single Render Function with Enlarged & Zoomable Image Support */
+    /* Render Function with Prominent Question & Option Images */
     function renderQuestion() {
       startTimer();
       const currentQ = state.allQuestions[state.currentIndex];
@@ -1026,7 +1083,7 @@
       const qBox = document.getElementById('question-text');
       const questionIndex = `${state.currentIndex + 1}. `;
       
-      // 1. Process Large Image Question
+      // 1. Render Question Image/Text
       const qData = extractImageAndText(currentQ.Question);
       if (qData.hasImage) {
         qBox.innerHTML = `
@@ -1049,7 +1106,7 @@
         qBox.innerText = `${questionIndex}${currentQ.Question}`;
       }
 
-      // 2. Process Options (with Zoomable Options Image Support)
+      // 2. Render Option Buttons with Large Option Images
       const container = document.getElementById('options-container');
       container.innerHTML = '';
 
@@ -1084,24 +1141,27 @@
 
         const optData = extractImageAndText(rawOption);
         const btn = document.createElement('button');
-        btn.className = 'option-btn';
+        btn.className = 'option-btn' + (optData.hasImage ? ' has-opt-image' : '');
 
-        let contentHtml = `<span><strong>(${key})</strong> ${optData.cleanText}</span>`;
+        let contentHtml = '';
         if (optData.hasImage) {
           contentHtml = `
-            <div style="display:flex; align-items:center; gap:8px; width:100%; justify-content:space-between;">
-              <span><strong>(${key})</strong> ${optData.cleanText}</span>
-              <img 
-                src="${optData.imageUrl}" 
-                alt="Option ${key}" 
-                class="option-img" 
-                loading="lazy" 
-                referrerpolicy="no-referrer"
-                onclick="openLightbox('${optData.imageUrl}', event)"
-                title="Tap to zoom"
-              />
+            <div class="opt-content-box">
+              <span class="opt-label-tag">(${key}) ${optData.cleanText}</span>
+              <div class="opt-img-container" onclick="openLightbox('${optData.imageUrl}', event)" title="Tap to zoom">
+                <img 
+                  src="${optData.imageUrl}" 
+                  alt="Option ${key}" 
+                  class="option-img" 
+                  loading="lazy" 
+                  referrerpolicy="no-referrer"
+                />
+                <div class="opt-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+              </div>
             </div>
           `;
+        } else {
+          contentHtml = `<span><strong style="color:#4338ca;">(${key})</strong> ${optData.cleanText}</span>`;
         }
         btn.innerHTML = contentHtml;
 
@@ -1112,10 +1172,10 @@
 
           if (key === correctKey) {
             btn.classList.add('correct');
-            btn.innerHTML += `<span>✔️</span>`;
+            btn.innerHTML += `<span style="margin-left:6px; font-weight:bold;">✔️</span>`;
           } else if (key === selected) {
             btn.classList.add('wrong');
-            btn.innerHTML += `<span>❌</span>`;
+            btn.innerHTML += `<span style="margin-left:6px; font-weight:bold;">❌</span>`;
           }
         } else {
           btn.onclick = () => handleAnswerSelect(key);
