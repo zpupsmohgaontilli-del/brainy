@@ -192,7 +192,7 @@
       color: #ffffff;
     }
 
-    /* Subject Cards (2x2) */
+    /* 2x2 Subject Cards */
     .user-greeting {
       display: flex;
       align-items: center;
@@ -384,7 +384,7 @@
       gap: 4px;
     }
 
-    /* Options Grid (Auto Scales for Images vs Text) */
+    /* Options Grid */
     .options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -428,7 +428,6 @@
       box-shadow: 0 4px 10px rgba(99, 102, 241, 0.12);
     }
 
-    /* Big Image-Centric Option Card Styling */
     .option-btn.has-opt-image {
       min-height: clamp(75px, 13vh, 120px);
       padding: clamp(6px, 1vh, 10px);
@@ -468,7 +467,7 @@
     }
 
     .option-img {
-      max-height: clamp(55px, 9.5vh, 95px); /* Increased from 45px to up to 95px */
+      max-height: clamp(55px, 9.5vh, 95px);
       max-width: clamp(80px, 18vw, 150px);
       width: auto;
       height: auto;
@@ -523,37 +522,122 @@
       grid-column: span 2;
     }
 
-    /* Result Screen */
+    /* Summary & Review Section */
     .result-box {
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: clamp(0.7rem, 2vh, 1.2rem);
-      margin: auto;
+      height: 100%;
       width: 100%;
-      max-width: 500px;
+      overflow: hidden;
     }
 
     .result-box h2 {
-      font-size: clamp(1.2rem, 2.8vh, 1.7rem);
+      font-size: clamp(1.1rem, 2.3vh, 1.5rem);
       color: #1e293b;
       font-weight: 800;
+      margin-bottom: 2px;
     }
 
-    .score-summary {
+    .score-summary-compact {
       background: #f8fafc;
-      border: 2px dashed #cbd5e1;
-      border-radius: 0.85rem;
-      padding: clamp(0.8rem, 2vh, 1.4rem);
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 0.75rem;
+      padding: clamp(0.4rem, 1vh, 0.8rem);
       display: flex;
-      flex-direction: column;
-      gap: clamp(0.4rem, 1vh, 0.7rem);
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: clamp(6px, 1vh, 10px);
+      flex-shrink: 0;
+    }
+
+    .score-summary-compact div {
+      text-align: center;
     }
 
     .score-digits {
-      font-size: clamp(1.8rem, 4.5vh, 2.8rem);
+      font-size: clamp(1.2rem, 2.5vh, 1.8rem);
       font-weight: 900;
       color: #6366f1;
+    }
+
+    /* Review Tabs */
+    .review-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+
+    .review-tab-btn {
+      flex: 1;
+      padding: 6px 4px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      font-size: clamp(0.72rem, 1.4vh, 0.85rem);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .review-tab-btn.active {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+
+    .review-tab-btn.tab-correct.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .review-tab-btn.tab-wrong.active {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .review-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    .review-item {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      border-left: 5px solid #94a3b8;
+    }
+
+    .review-item.item-correct {
+      border-left-color: #10b981;
+      background: #f0fdf4;
+    }
+
+    .review-item.item-wrong {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .review-q-title {
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .review-ans-info {
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     /* Footer & Visitors */
@@ -690,7 +774,7 @@
   <!-- Full-Screen Lightbox Container -->
   <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
     <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
-    <img id="lightbox-image" class="lightbox-img" src="" alt="Zoomed High-Definition View" onclick="event.stopPropagation()" />
+    <img id="lightbox-image" class="lightbox-img" src="" alt="Zoomed View" onclick="event.stopPropagation()" />
   </div>
 
   <div class="app-container">
@@ -786,17 +870,37 @@
       </div>
     </section>
 
-    <!-- Screen 4: Result Screen -->
+    <!-- Screen 4: Result & Review Tabs Screen -->
     <section id="screen-summary" class="screen">
       <div class="result-box">
-        <h2>Congratulations! 🎉 Practice is completed.</h2>
-        <div class="score-summary">
-          <p id="result-student-name" style="font-weight: 700; font-size: clamp(1rem, 2vh, 1.25rem); color: #334155; word-break: break-word;"></p>
-          <p>Your total score:</p>
-          <div class="score-digits" id="final-score-text">0 / 0</div>
-          <p id="score-remarks" style="font-weight: 600; color: #059669;"></p>
+        <h2 id="summary-title">Congratulations! 🎉 Practice is completed.</h2>
+        
+        <div class="score-summary-compact">
+          <div>
+            <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">STUDENT</span>
+            <div id="result-student-name" style="font-weight: 800; color: #1e293b; font-size: 0.95rem;">-</div>
+          </div>
+          <div>
+            <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">SCORE</span>
+            <div class="score-digits" id="final-score-text">0 / 0</div>
+          </div>
+          <div>
+            <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">ACCURACY</span>
+            <div id="sum-accuracy" style="font-weight: 900; color: #ec4899; font-size: 1.1rem;">0%</div>
+          </div>
         </div>
-        <div style="display: flex; gap: 10px; justify-content: center;">
+
+        <!-- Filter Tabs for Right / Wrong Questions -->
+        <div class="review-tabs">
+          <button class="review-tab-btn active" onclick="switchReviewTab('all')">📋 All (<span id="count-all">0</span>)</button>
+          <button class="review-tab-btn tab-correct" onclick="switchReviewTab('correct')">✅ Right (<span id="count-right">0</span>)</button>
+          <button class="review-tab-btn tab-wrong" onclick="switchReviewTab('wrong')">❌ Wrong (<span id="count-wrong">0</span>)</button>
+        </div>
+
+        <!-- Scrollable Questions Review List -->
+        <div class="review-list" id="review-list-container"></div>
+
+        <div style="display: flex; gap: 8px; justify-content: center; flex-shrink: 0;">
           <button class="nav-btn" style="flex: 1;" onclick="switchScreen('screen-subjects')">🔄 Another Arena</button>
           <button class="nav-btn" style="flex: 1;" onclick="location.reload()">🏠 Home</button>
         </div>
@@ -836,7 +940,8 @@
       userAnswers: {},
       timer: null,
       timeLeft: 60,
-      solvedSet: new Set()
+      solvedSet: new Set(),
+      activeReviewTab: 'all'
     };
 
     /* Robust Image & Text Extractor */
@@ -883,13 +988,15 @@
     }
     initVisitorCounter();
 
-    /* Web Audio Synthesizer */
+    /* Enhanced Web Audio Synthesizer with Clearer Error & Warning Audio */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const now = audioCtx.currentTime;
 
       if (type === 'correct') {
+        // Bright cheerful 3-note chime
         [523.25, 659.25, 783.99].forEach((freq, i) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
@@ -904,17 +1011,57 @@
           osc.stop(now + (i * 0.08) + 0.35);
         });
       } else if (type === 'wrong') {
+        // Cartoonish 2-tone descending buzzer (distinct fail sound)
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sawtooth';
+        osc2.type = 'sawtooth';
+
+        osc1.frequency.setValueAtTime(196, now); // G3
+        osc1.frequency.linearRampToValueAtTime(146.83, now + 0.28); // D3
+
+        osc2.frequency.setValueAtTime(185, now); // F#3 (dissonance)
+        osc2.frequency.linearRampToValueAtTime(138.59, now + 0.28);
+
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.35);
+        osc2.stop(now + 0.35);
+      } else if (type === 'timeout') {
+        // Low double-thud for time running out
+        [130.81, 98].forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + (i * 0.12));
+          gain.gain.setValueAtTime(0.3, now + (i * 0.12));
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.12) + 0.2);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + (i * 0.12));
+          osc.stop(now + (i * 0.12) + 0.2);
+        });
+      } else if (type === 'tick') {
+        // Subtle warning tick for final 5 seconds
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.exponentialRampToValueAtTime(110, now + 0.25);
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start(now);
-        osc.stop(now + 0.25);
+        osc.stop(now + 0.04);
       } else if (type === 'fanfare') {
         [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
           const osc = audioCtx.createOscillator();
@@ -1058,12 +1205,7 @@
     function calculateScore() {
       let score = 0;
       state.allQuestions.forEach((q, idx) => {
-        let correctKey = (q.Answer || '').trim().toUpperCase();
-        ['A', 'B', 'C', 'D'].forEach(k => {
-          if (q[`Option${k}`] && q[`Option${k}`].trim().toUpperCase() === correctKey) {
-            correctKey = k;
-          }
-        });
+        let correctKey = getCleanCorrectKey(q);
         if (state.userAnswers[idx] && state.userAnswers[idx] === correctKey) {
           score++;
         }
@@ -1071,7 +1213,17 @@
       return score;
     }
 
-    /* Render Function with Prominent Question & Option Images */
+    function getCleanCorrectKey(q) {
+      let correctKey = (q.Answer || '').trim().toUpperCase();
+      ['A', 'B', 'C', 'D'].forEach(k => {
+        if (q[`Option${k}`] && q[`Option${k}`].trim().toUpperCase() === correctKey) {
+          correctKey = k;
+        }
+      });
+      return correctKey;
+    }
+
+    /* Render Active Question */
     function renderQuestion() {
       startTimer();
       const currentQ = state.allQuestions[state.currentIndex];
@@ -1106,7 +1258,7 @@
         qBox.innerText = `${questionIndex}${currentQ.Question}`;
       }
 
-      // 2. Render Option Buttons with Large Option Images
+      // 2. Render Option Buttons
       const container = document.getElementById('options-container');
       container.innerHTML = '';
 
@@ -1120,10 +1272,7 @@
           badge.style.background = "#fee2e2";
           badge.style.color = "#b91c1c";
         } else {
-          let correctKey = (currentQ.Answer || '').trim().toUpperCase();
-          keys.forEach(k => {
-            if (currentQ[`Option${k}`] && currentQ[`Option${k}`].trim().toUpperCase() === correctKey) correctKey = k;
-          });
+          let correctKey = getCleanCorrectKey(currentQ);
           const isRight = selected === correctKey;
           badge.innerText = isRight ? "🎉 Correct Answer!" : "❌ Incorrect Answer!";
           badge.style.background = isRight ? "#dcfce7" : "#fee2e2";
@@ -1167,8 +1316,7 @@
 
         if (selected) {
           btn.disabled = true;
-          let correctKey = (currentQ.Answer || '').trim().toUpperCase();
-          if (correctKey === rawOption.trim().toUpperCase()) correctKey = key;
+          let correctKey = getCleanCorrectKey(currentQ);
 
           if (key === correctKey) {
             btn.classList.add('correct');
@@ -1200,13 +1348,7 @@
 
       clearInterval(state.timer);
       const currentQ = state.allQuestions[state.currentIndex];
-      let correctOption = (currentQ.Answer || '').trim().toUpperCase();
-
-      ['A', 'B', 'C', 'D'].forEach(k => {
-        if (currentQ[`Option${k}`] && currentQ[`Option${k}`].trim().toUpperCase() === correctOption) {
-          correctOption = k;
-        }
-      });
+      let correctOption = getCleanCorrectKey(currentQ);
 
       state.userAnswers[state.currentIndex] = selectedKey;
       state.solvedSet.add(state.currentIndex);
@@ -1252,9 +1394,14 @@
         document.getElementById('timer-text').innerText = `⏳ Time: ${Math.max(0, state.timeLeft)} Seconds`;
         document.getElementById('timer-bar').style.width = `${Math.max(0, (state.timeLeft / 60) * 100)}%`;
 
+        // Warning tick on final 5 seconds
+        if (state.timeLeft <= 5 && state.timeLeft > 0) {
+          playSound('tick');
+        }
+
         if (state.timeLeft <= 0) {
           clearInterval(state.timer);
-          playSound('wrong');
+          playSound('timeout');
           if (!state.userAnswers.hasOwnProperty(state.currentIndex)) {
             state.userAnswers[state.currentIndex] = 'TIMEOUT';
             state.solvedSet.add(state.currentIndex);
@@ -1268,30 +1415,85 @@
       }, 1000);
     }
 
+    /* Result Calculation & Review Renderer */
     function confirmEndPractice() {
       clearInterval(state.timer);
       const totalScore = calculateScore();
       const totalQuestions = state.allQuestions.length;
+      const accuracy = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
 
-      document.getElementById('result-student-name').innerText = `Student: ${state.userName}`;
+      document.getElementById('result-student-name').innerText = state.userName;
       document.getElementById('final-score-text').innerText = `${totalScore} / ${totalQuestions}`;
-
-      const remarksElem = document.getElementById('score-remarks');
-      const ratio = totalQuestions > 0 ? (totalScore / totalQuestions) : 0;
+      document.getElementById('sum-accuracy').innerText = `${accuracy}%`;
 
       playSound('fanfare');
-
-      if (ratio === 1) {
-        remarksElem.innerText = "Outstanding! Perfect score! 🌟🎯";
-        confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-      } else if (ratio >= 0.6) {
-        remarksElem.innerText = "Great job! Keep practicing to aim higher! 👍";
-        confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
-      } else {
-        remarksElem.innerText = "Good effort! Try again to improve your score! 📚";
+      if (accuracy >= 80) {
+        confetti({ particleCount: 140, spread: 90, origin: { y: 0.6 } });
       }
 
+      // Count totals for tab badges
+      let rightCount = 0;
+      let wrongCount = 0;
+      state.allQuestions.forEach((q, idx) => {
+        const selected = state.userAnswers[idx];
+        const correct = getCleanCorrectKey(q);
+        if (selected && selected === correct) {
+          rightCount++;
+        } else {
+          wrongCount++;
+        }
+      });
+
+      document.getElementById('count-all').innerText = totalQuestions;
+      document.getElementById('count-right').innerText = rightCount;
+      document.getElementById('count-wrong').innerText = wrongCount;
+
+      switchReviewTab('all');
       switchScreen('screen-summary');
+    }
+
+    function switchReviewTab(tabType) {
+      state.activeReviewTab = tabType;
+      
+      document.querySelectorAll('.review-tab-btn').forEach(b => b.classList.remove('active'));
+      if (tabType === 'all') document.querySelectorAll('.review-tab-btn')[0].classList.add('active');
+      if (tabType === 'correct') document.querySelectorAll('.review-tab-btn')[1].classList.add('active');
+      if (tabType === 'wrong') document.querySelectorAll('.review-tab-btn')[2].classList.add('active');
+
+      renderReviewList();
+    }
+
+    function renderReviewList() {
+      const container = document.getElementById('review-list-container');
+      container.innerHTML = '';
+
+      state.allQuestions.forEach((q, idx) => {
+        const selected = state.userAnswers[idx] || 'Not Attempted';
+        const correct = getCleanCorrectKey(q);
+        const isRight = selected === correct;
+
+        if (state.activeReviewTab === 'correct' && !isRight) return;
+        if (state.activeReviewTab === 'wrong' && isRight) return;
+
+        const qData = extractImageAndText(q.Question);
+        const item = document.createElement('div');
+        item.className = `review-item ${isRight ? 'item-correct' : 'item-wrong'}`;
+
+        item.innerHTML = `
+          <div class="review-q-title">Q${idx + 1}. ${qData.cleanText || 'Question Image'}</div>
+          ${qData.hasImage ? `<img src="${qData.imageUrl}" style="max-height:60px; object-fit:contain; border-radius:4px; margin-bottom:4px;" loading="lazy" />` : ''}
+          <div class="review-ans-info">
+            <span><strong>Your Answer:</strong> <span style="color:${isRight ? '#15803d' : '#b91c1c'}; font-weight:bold;">${selected}</span></span>
+            <span><strong>Correct Answer:</strong> <span style="color:#15803d; font-weight:bold;">${correct}</span></span>
+          </div>
+        `;
+
+        container.appendChild(item);
+      });
+
+      if (container.children.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px; font-weight:600;">No questions in this section!</div>`;
+      }
     }
   </script>
 </body>
