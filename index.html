@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Brainy 🧠✨ - Interactive Learning Hub</title>
+  <title>Brainy 🧠⚡ — Ultimate Arena</title>
 
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <!-- PapaParse for Google Sheets & Canvas Confetti -->
@@ -17,26 +17,35 @@
 
   <style>
     :root {
-      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-      --glass-bg: rgba(255, 255, 255, 0.96);
-      --glass-border: rgba(255, 255, 255, 0.6);
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --correct-bg: #dcfce7;
-      --correct-border: #16a34a;
-      --wrong-bg: #fee2e2;
-      --wrong-border: #ef4444;
-      --shadow-xl: 0 15px 35px -10px rgba(0, 0, 0, 0.35);
+      --bg-dark: #070913;
+      --card-bg: rgba(18, 24, 43, 0.78);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --card-border-glow: rgba(99, 102, 241, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+      --gradient-fire: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+      --gradient-aurora: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+      --gradient-emerald: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+      --gradient-amber: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+
+      --correct-glow: 0 0 24px rgba(16, 185, 129, 0.45);
+      --wrong-glow: 0 0 24px rgba(239, 68, 68, 0.45);
+      --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    h1, h2, h3, .header-tag, .score-digits, .opt-label-tag {
+      font-family: 'Outfit', sans-serif;
     }
 
     html, body {
@@ -44,33 +53,56 @@
       height: 100dvh;
       width: 100vw;
       overflow: hidden;
+      background-color: var(--bg-dark);
     }
 
     body {
-      background: var(--bg-gradient);
+      background: radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.22) 0%, transparent 40%),
+                  radial-gradient(circle at 85% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 45%),
+                  radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.8) 0%, #030712 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       color: var(--text-main);
       padding: clamp(0.4rem, 1.2vh, 1rem) clamp(0.6rem, 1.8vw, 1.6rem);
+      position: relative;
+    }
+
+    /* Ambient animated mesh blobs */
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+      animation: pulseGlow 8s ease-in-out infinite alternate;
+    }
+    .glow-1 { top: 5%; left: 10%; width: 280px; height: 280px; background: rgba(99, 102, 241, 0.35); }
+    .glow-2 { bottom: 5%; right: 10%; width: 320px; height: 320px; background: rgba(236, 72, 153, 0.28); }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(0.9) translate(0, 0); }
+      100% { transform: scale(1.15) translate(20px, -20px); }
     }
 
     .app-container {
       width: min(96%, 920px);
       height: 100%;
-      max-height: calc(100dvh - 68px);
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: clamp(0.8rem, 2vh, 1.5rem);
-      box-shadow: var(--shadow-xl);
-      padding: clamp(0.7rem, 2vh, 1.4rem);
+      max-height: calc(100dvh - 65px);
+      background: var(--card-bg);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--card-border);
+      border-radius: clamp(1rem, 2.2vh, 1.75rem);
+      box-shadow: var(--shadow-2xl), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      padding: clamp(0.8rem, 2vh, 1.5rem);
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
+      z-index: 10;
     }
 
     .screen {
@@ -79,35 +111,37 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      animation: bounceScreen 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation: screenEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     .screen.active {
       display: flex;
     }
 
-    @keyframes bounceScreen {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
+    @keyframes screenEnter {
+      from { opacity: 0; transform: scale(0.97) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .header-tag {
-      font-size: clamp(1.6rem, 4vh, 2.6rem);
+      font-size: clamp(1.7rem, 4vh, 2.8rem);
       font-weight: 900;
       text-align: center;
-      background: linear-gradient(to right, #facc15, #f43f5e, #38bdf8);
+      background: linear-gradient(135deg, #ffffff 15%, #cbd5e1 50%, #818cf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
-      margin-bottom: clamp(2px, 0.6vh, 4px);
+      letter-spacing: -0.02em;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+      margin-bottom: clamp(2px, 0.5vh, 4px);
     }
 
     .subtitle {
       text-align: center;
       color: var(--text-muted);
-      font-size: clamp(0.8rem, 1.8vh, 1.05rem);
+      font-size: clamp(0.8rem, 1.7vh, 1.02rem);
       font-weight: 600;
-      margin-bottom: clamp(8px, 1.5vh, 14px);
+      margin-bottom: clamp(10px, 1.8vh, 16px);
+      letter-spacing: 0.01em;
     }
 
     /* Welcome Screen */
@@ -116,70 +150,85 @@
       width: 100%;
       max-width: 460px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .mascot {
-      font-size: clamp(3.2rem, 7vh, 4.8rem);
-      margin-bottom: clamp(4px, 1vh, 10px);
+      font-size: clamp(3.4rem, 7.5vh, 5rem);
+      margin-bottom: clamp(6px, 1.2vh, 12px);
       display: inline-block;
-      animation: wiggle 2.5s infinite ease-in-out;
+      animation: floatMascot 3s ease-in-out infinite alternate;
+      filter: drop-shadow(0 10px 20px rgba(99, 102, 241, 0.4));
     }
 
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(0deg) scale(1); }
-      25% { transform: rotate(-6deg) scale(1.06); }
-      75% { transform: rotate(6deg) scale(1.06); }
+    @keyframes floatMascot {
+      0% { transform: translateY(0px) rotate(-3deg); }
+      100% { transform: translateY(-10px) rotate(3deg); }
     }
 
     .input-field {
       width: 100%;
-      padding: clamp(0.6rem, 1.6vh, 0.9rem);
-      border: 2px solid #cbd5e1;
-      border-radius: 0.65rem;
-      font-size: clamp(0.95rem, 1.9vh, 1.15rem);
+      padding: clamp(0.75rem, 1.8vh, 1.05rem);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.85rem;
+      font-size: clamp(0.95rem, 2vh, 1.2rem);
       font-weight: 700;
       text-align: center;
       outline: none;
-      margin-bottom: clamp(12px, 2vh, 18px);
-      background: #f8fafc;
-      color: #1e293b;
-      transition: all 0.2s ease;
+      margin-bottom: clamp(14px, 2.2vh, 20px);
+      background: rgba(15, 23, 42, 0.65);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2) inset;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .input-field:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-      background: #ffffff;
+      border-color: #818cf8;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.35), 0 4px 12px rgba(0,0,0,0.4) inset;
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .input-field::placeholder {
+      color: #64748b;
+      font-weight: 600;
     }
 
     .nav-btn, .btn-primary {
-      padding: clamp(0.55rem, 1.4vh, 0.85rem) clamp(0.8rem, 2vw, 1.4rem);
+      padding: clamp(0.65rem, 1.5vh, 0.95rem) clamp(1rem, 2.2vw, 1.6rem);
       border: none;
-      border-radius: clamp(0.5rem, 1.2vh, 0.8rem);
-      font-size: clamp(0.85rem, 1.7vh, 1.05rem);
-      font-weight: 700;
-      color: white;
+      border-radius: 0.85rem;
+      font-size: clamp(0.88rem, 1.8vh, 1.1rem);
+      font-weight: 800;
+      color: #ffffff;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
-      background: var(--primary-gradient);
-      box-shadow: 0 3px 10px rgba(99, 102, 241, 0.25);
-      transition: all 0.15s ease;
+      gap: 0.5rem;
+      background: var(--gradient-primary);
+      box-shadow: 0 8px 24px -4px rgba(99, 102, 241, 0.5);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       text-decoration: none;
     }
 
     .nav-btn:hover:not(:disabled), .btn-primary:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.08);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 28px -4px rgba(99, 102, 241, 0.7);
+      filter: brightness(1.1);
+    }
+
+    .nav-btn:active:not(:disabled), .btn-primary:active {
+      transform: translateY(1px);
     }
 
     .nav-btn:disabled {
-      background: #cbd5e1 !important;
-      color: #94a3b8 !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #475569 !important;
       box-shadow: none !important;
       cursor: not-allowed;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .btn-primary {
@@ -188,8 +237,10 @@
 
     .end-btn {
       background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      box-shadow: 0 3px 10px rgba(239, 68, 68, 0.25);
-      color: #ffffff;
+      box-shadow: 0 8px 24px -4px rgba(239, 68, 68, 0.45);
+    }
+    .end-btn:hover:not(:disabled) {
+      box-shadow: 0 12px 28px -4px rgba(239, 68, 68, 0.65);
     }
 
     /* 2x2 Subject Cards */
@@ -197,21 +248,22 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #ecfdf5;
-      color: #047857;
-      padding: clamp(6px, 1.2vh, 10px) 16px;
+      background: rgba(99, 102, 241, 0.12);
+      color: #a5b4fc;
+      padding: clamp(7px, 1.3vh, 11px) 18px;
       border-radius: 999px;
-      margin-bottom: clamp(8px, 1.5vh, 12px);
+      margin-bottom: clamp(10px, 1.6vh, 14px);
       flex-shrink: 0;
-      border: 1px solid #a7f3d0;
+      border: 1px solid rgba(99, 102, 241, 0.3);
       font-weight: 700;
+      font-size: 0.9rem;
     }
 
     .subject-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
-      gap: clamp(8px, 1.5vh, 14px);
+      gap: clamp(10px, 1.8vh, 16px);
       flex-grow: 1;
       width: 100%;
       height: 100%;
@@ -223,37 +275,49 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: clamp(8px, 1.5vh, 14px);
-      border-radius: clamp(0.6rem, 1.5vh, 1rem);
+      padding: clamp(10px, 1.8vh, 16px);
+      border-radius: clamp(0.9rem, 2vh, 1.25rem);
       color: #fff;
       cursor: pointer;
       position: relative;
-      box-shadow: 0 8px 18px -4px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+    }
+
+    .subject-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 70%);
+      opacity: 0.6;
+      transition: opacity 0.2s;
     }
 
     .subject-card:hover {
-      transform: translateY(-3px) scale(1.02);
-      filter: brightness(1.06);
+      transform: translateY(-4px) scale(1.025);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.6);
     }
 
     .subject-card i {
-      font-size: clamp(1.6rem, 3.8vh, 2.4rem);
-      margin-bottom: clamp(3px, 0.6vh, 6px);
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+      font-size: clamp(1.8rem, 4.2vh, 2.7rem);
+      margin-bottom: clamp(4px, 0.8vh, 8px);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
     }
 
     .subject-card h3 {
-      font-size: clamp(0.95rem, 2vh, 1.25rem);
+      font-size: clamp(1.05rem, 2.2vh, 1.4rem);
       font-weight: 800;
+      letter-spacing: -0.01em;
     }
 
-    .card-marathi { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
-    .card-english { background: var(--primary-gradient); }
-    .card-maths   { background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); }
-    .card-gma     { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+    .card-marathi { background: linear-gradient(135deg, #ea580c 0%, #f97316 60%, #fdba74 100%); }
+    .card-english { background: var(--gradient-primary); }
+    .card-maths   { background: linear-gradient(135deg, #0284c7 0%, #06b6d4 60%, #67e8f9 100%); }
+    .card-gma     { background: var(--gradient-emerald); }
 
     /* Quiz Header */
     .card-top-bar {
@@ -261,51 +325,61 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-bottom: clamp(0.25rem, 0.8vh, 0.5rem);
+      gap: 0.4rem;
+      margin-bottom: clamp(0.3rem, 0.8vh, 0.6rem);
       flex-shrink: 0;
     }
 
     .badge {
-      background: #e0e7ff;
-      color: #4338ca;
-      font-size: clamp(0.72rem, 1.5vh, 0.9rem);
-      font-weight: 700;
-      padding: clamp(0.2rem, 0.5vh, 0.4rem) clamp(0.5rem, 1vw, 0.8rem);
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      font-size: clamp(0.74rem, 1.5vh, 0.92rem);
+      font-weight: 800;
+      padding: clamp(0.25rem, 0.6vh, 0.45rem) clamp(0.6rem, 1.2vw, 0.9rem);
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.35rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
-    .student-badge { background: #ecfdf5; color: #047857; }
-    .live-score-badge { background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; }
+    .student-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .live-score-badge {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      border-color: rgba(99, 102, 241, 0.4);
+    }
 
     .timer-panel {
-      background: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 0.65rem;
-      padding: clamp(0.25rem, 0.6vh, 0.5rem) clamp(0.5rem, 1vw, 0.8rem);
-      margin-bottom: clamp(0.3rem, 0.8vh, 0.5rem);
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: clamp(0.3rem, 0.7vh, 0.55rem) clamp(0.6rem, 1.2vw, 0.9rem);
+      margin-bottom: clamp(0.35rem, 0.9vh, 0.65rem);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.8rem;
+      gap: 0.9rem;
       flex-shrink: 0;
     }
 
     .timer-text-display {
       font-weight: 800;
-      font-size: clamp(0.75rem, 1.6vh, 0.92rem);
-      color: #4338ca;
+      font-size: clamp(0.78rem, 1.6vh, 0.95rem);
+      color: #cbd5e1;
       white-space: nowrap;
-      min-width: 90px;
+      min-width: 95px;
     }
 
     .timer-track {
       flex: 1;
-      height: clamp(5px, 0.9vh, 7px);
-      background: #e2e8f0;
+      height: clamp(6px, 1vh, 8px);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 999px;
       overflow: hidden;
     }
@@ -313,23 +387,24 @@
     .timer-progress {
       height: 100%;
       width: 100%;
-      background: linear-gradient(90deg, #10b981, #6366f1);
+      background: linear-gradient(90deg, #10b981 0%, #6366f1 50%, #ec4899 100%);
       border-radius: 999px;
       transition: width 1s linear;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.7);
     }
 
     /* Question Box */
     .question-box {
-      font-size: clamp(0.95rem, 2.2vh, 1.3rem);
+      font-size: clamp(0.98rem, 2.3vh, 1.35rem);
       font-weight: 700;
-      line-height: 1.3;
-      color: #1e293b;
-      margin-bottom: clamp(0.35rem, 0.9vh, 0.6rem);
-      background: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      border-left: 5px solid #6366f1;
-      padding: clamp(8px, 1.4vh, 12px);
-      border-radius: 0.75rem;
+      line-height: 1.35;
+      color: #f8fafc;
+      margin-bottom: clamp(0.4rem, 1vh, 0.75rem);
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-left: 5px solid #818cf8;
+      padding: clamp(10px, 1.6vh, 16px);
+      border-radius: 0.9rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -338,6 +413,7 @@
       max-height: 42%;
       overflow-y: auto;
       flex-shrink: 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) inset;
     }
 
     .img-wrapper {
@@ -346,7 +422,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: clamp(4px, 0.6vh, 8px);
+      margin-top: clamp(4px, 0.8vh, 10px);
       cursor: zoom-in;
     }
 
@@ -356,12 +432,12 @@
       height: auto;
       max-height: clamp(120px, 24vh, 220px);
       object-fit: contain;
-      border-radius: 0.65rem;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-      border: 1.5px solid #cbd5e1;
-      background: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: #0f172a;
       padding: 4px;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .img-wrapper:hover .question-img {
@@ -370,32 +446,33 @@
 
     .zoom-hint {
       position: absolute;
-      bottom: 6px;
-      right: 10px;
-      background: rgba(15, 23, 42, 0.75);
+      bottom: 8px;
+      right: 12px;
+      background: rgba(3, 7, 18, 0.85);
       color: #ffffff;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 50px;
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       font-weight: 700;
       pointer-events: none;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     /* Options Grid */
     .options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: clamp(0.4rem, 1vh, 0.75rem);
-      margin-bottom: clamp(0.35rem, 0.9vh, 0.7rem);
+      gap: clamp(0.45rem, 1.1vh, 0.85rem);
+      margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
       flex-grow: 1;
       min-height: 0;
       overflow-y: auto;
     }
 
-    @media (max-width: 540px) {
+    @media (max-width: 580px) {
       .options-grid {
         grid-template-columns: 1fr;
       }
@@ -404,36 +481,36 @@
     .option-btn {
       width: 100%;
       text-align: left;
-      padding: clamp(0.45rem, 1vh, 0.75rem) clamp(0.6rem, 1.2vw, 0.9rem);
-      background: #ffffff;
-      border: 2px solid #e2e8f0;
-      border-radius: clamp(0.5rem, 1.2vh, 0.8rem);
-      font-size: clamp(0.85rem, 1.7vh, 1.05rem);
+      padding: clamp(0.5rem, 1.1vh, 0.85rem) clamp(0.7rem, 1.4vw, 1.05rem);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: clamp(0.65rem, 1.4vh, 0.95rem);
+      font-size: clamp(0.88rem, 1.8vh, 1.1rem);
       font-weight: 600;
-      color: #334155;
+      color: #e2e8f0;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.15s ease;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       position: relative;
-      min-height: clamp(44px, 7vh, 65px);
+      min-height: clamp(48px, 7.5vh, 68px);
     }
 
     .option-btn:hover:not(:disabled) {
-      border-color: #6366f1;
-      background: #f8fafc;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.12);
+      border-color: #818cf8;
+      background: rgba(99, 102, 241, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
     }
 
     .option-btn.has-opt-image {
-      min-height: clamp(75px, 13vh, 120px);
-      padding: clamp(6px, 1vh, 10px);
+      min-height: clamp(80px, 14vh, 125px);
+      padding: clamp(6px, 1.1vh, 10px);
       flex-direction: row;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .opt-content-box {
@@ -441,13 +518,13 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      gap: 10px;
+      gap: 12px;
     }
 
     .opt-label-tag {
       font-weight: 800;
-      color: #4338ca;
-      font-size: clamp(0.85rem, 1.7vh, 1.05rem);
+      color: #818cf8;
+      font-size: clamp(0.88rem, 1.8vh, 1.1rem);
       flex-shrink: 0;
     }
 
@@ -459,10 +536,9 @@
       margin-left: auto;
       flex-shrink: 0;
       border-radius: 8px;
-      padding: 3px;
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      padding: 4px;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       cursor: zoom-in;
     }
 
@@ -477,14 +553,14 @@
     }
 
     .opt-img-container:hover .option-img {
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
 
     .opt-zoom-icon {
       position: absolute;
       bottom: 2px;
       right: 2px;
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(3, 7, 18, 0.85);
       color: #ffffff;
       font-size: 0.6rem;
       padding: 2px 4px;
@@ -493,17 +569,17 @@
     }
 
     .option-btn.correct {
-      background: var(--correct-bg) !important;
-      border-color: var(--correct-border) !important;
-      color: #14532d !important;
-      box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25) !important;
+      background: rgba(16, 185, 129, 0.22) !important;
+      border-color: #10b981 !important;
+      color: #6ee7b7 !important;
+      box-shadow: var(--correct-glow) !important;
     }
 
     .option-btn.wrong {
-      background: var(--wrong-bg) !important;
-      border-color: var(--wrong-border) !important;
-      color: #7f1d1d !important;
-      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25) !important;
+      background: rgba(239, 68, 68, 0.22) !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+      box-shadow: var(--wrong-glow) !important;
     }
 
     .option-btn:disabled {
@@ -513,7 +589,7 @@
     .nav-buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: clamp(0.4rem, 1vh, 0.8rem);
+      gap: clamp(0.45rem, 1.1vh, 0.85rem);
       margin-top: auto;
       flex-shrink: 0;
     }
@@ -533,22 +609,23 @@
     }
 
     .result-box h2 {
-      font-size: clamp(1.1rem, 2.3vh, 1.5rem);
-      color: #1e293b;
+      font-size: clamp(1.15rem, 2.4vh, 1.6rem);
+      color: #f8fafc;
       font-weight: 800;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .score-summary-compact {
-      background: #f8fafc;
-      border: 1.5px dashed #cbd5e1;
-      border-radius: 0.75rem;
-      padding: clamp(0.4rem, 1vh, 0.8rem);
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 0.9rem;
+      padding: clamp(0.5rem, 1.2vh, 0.9rem);
       display: flex;
       justify-content: space-around;
       align-items: center;
-      margin-bottom: clamp(6px, 1vh, 10px);
+      margin-bottom: clamp(8px, 1.2vh, 12px);
       flex-shrink: 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) inset;
     }
 
     .score-summary-compact div {
@@ -556,45 +633,49 @@
     }
 
     .score-digits {
-      font-size: clamp(1.2rem, 2.5vh, 1.8rem);
+      font-size: clamp(1.3rem, 2.7vh, 2rem);
       font-weight: 900;
-      color: #6366f1;
+      background: linear-gradient(135deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     /* Review Tabs */
     .review-tabs {
       display: flex;
-      gap: 6px;
-      margin-bottom: 6px;
+      gap: 8px;
+      margin-bottom: 8px;
       flex-shrink: 0;
     }
 
     .review-tab-btn {
       flex: 1;
-      padding: 6px 4px;
-      border: 1.5px solid #cbd5e1;
+      padding: 8px 6px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
-      background: #f8fafc;
-      color: #475569;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
       font-weight: 700;
-      font-size: clamp(0.72rem, 1.4vh, 0.85rem);
+      font-size: clamp(0.74rem, 1.4vh, 0.88rem);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s ease;
     }
 
     .review-tab-btn.active {
-      background: var(--primary-gradient);
+      background: var(--gradient-primary);
       color: #ffffff;
       border-color: transparent;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
     }
 
     .review-tab-btn.tab-correct.active {
-      background: linear-gradient(135deg, #10b981, #059669);
+      background: var(--gradient-emerald);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
     }
 
     .review-tab-btn.tab-wrong.active {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
     }
 
     .review-list {
@@ -609,61 +690,62 @@
     }
 
     .review-item {
-      background: #ffffff;
-      border: 1.5px solid #e2e8f0;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      border-left: 5px solid #94a3b8;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      border-left: 5px solid #64748b;
     }
 
     .review-item.item-correct {
       border-left-color: #10b981;
-      background: #f0fdf4;
+      background: rgba(16, 185, 129, 0.08);
     }
 
     .review-item.item-wrong {
       border-left-color: #ef4444;
-      background: #fef2f2;
+      background: rgba(239, 68, 68, 0.08);
     }
 
     .review-q-title {
       font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 4px;
+      color: #f8fafc;
+      margin-bottom: 6px;
     }
 
     .review-ans-info {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 14px;
     }
 
     /* Footer & Visitors */
     footer {
       text-align: center;
-      color: #cbd5e1;
+      color: var(--text-muted);
       font-size: clamp(0.72rem, 1.3vh, 0.85rem);
-      margin-top: clamp(0.25rem, 0.8vh, 0.5rem);
+      margin-top: clamp(0.3rem, 0.8vh, 0.6rem);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
       flex-shrink: 0;
+      z-index: 10;
     }
 
     .visitor-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 0.2rem 0.8rem;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.25rem 0.9rem;
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
       font-size: clamp(0.7rem, 1.3vh, 0.82rem);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .visitor-count-number {
@@ -675,8 +757,8 @@
 
     .credit {
       font-size: clamp(0.66rem, 1.2vh, 0.76rem);
-      color: #cbd5e1;
-      font-weight: 500;
+      color: #64748b;
+      font-weight: 600;
       line-height: 1.2;
     }
 
@@ -684,9 +766,9 @@
     .lightbox-modal {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.94);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(3, 7, 18, 0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -706,10 +788,10 @@
       max-height: 88vh;
       object-fit: contain;
       border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      background: #ffffff;
-      animation: zoomIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: #0f172a;
+      animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes zoomIn {
@@ -723,7 +805,7 @@
       right: 22px;
       font-size: 2rem;
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
       width: 44px;
       height: 44px;
@@ -731,7 +813,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       transition: background 0.2s ease;
     }
 
@@ -743,25 +825,28 @@
     .loader-overlay {
       position: absolute;
       inset: 0;
-      background: var(--glass-bg);
+      background: rgba(7, 9, 19, 0.92);
+      backdrop-filter: blur(16px);
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: clamp(0.8rem, 2vh, 1.5rem);
+      border-radius: clamp(1rem, 2.2vh, 1.75rem);
       z-index: 50;
       text-align: center;
       padding: 20px;
     }
 
     .spinner {
-      width: 44px;
-      height: 44px;
-      border: 4px solid #e2e8f0;
-      border-top-color: #6366f1;
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #818cf8;
+      border-right-color: #ec4899;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      margin-bottom: 10px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
     }
 
     @keyframes spin {
@@ -770,6 +855,10 @@
   </style>
 </head>
 <body>
+
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
 
   <!-- Full-Screen Lightbox Container -->
   <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
@@ -782,16 +871,16 @@
     <!-- Loading Modal -->
     <div id="loader" class="loader-overlay">
       <div class="spinner"></div>
-      <h3 style="color: #6366f1; font-size: 1.2rem;">Loading Questions... 🚀</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem;">Fetching live questions from Sheet</p>
+      <h3 style="color: #a5b4fc; font-size: 1.3rem; margin-bottom: 6px;">Loading Arena... ⚡</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Fetching questions directly from Sheet</p>
     </div>
 
     <!-- Screen 1: Welcome -->
     <section id="screen-welcome" class="screen active">
       <div class="welcome-box">
-        <div class="mascot">🧠✨</div>
-        <h1 class="header-tag">✨ Welcome to Brainy 🎯</h1>
-        <p class="subtitle">💡 Interactive Learning & Practice Hub for Champions! 🏆</p>
+        <div class="mascot">🧠⚡</div>
+        <h1 class="header-tag">Brainy Arena</h1>
+        <p class="subtitle">Next-Gen Interactive Learning & Challenge Hub</p>
         
         <input 
           type="text" 
@@ -802,7 +891,7 @@
           autocomplete="off"
         />
         <button id="start-app-btn" class="btn-primary">
-          Start Practice 🚀
+          Enter Challenge 🚀
         </button>
       </div>
     </section>
@@ -810,36 +899,36 @@
     <!-- Screen 2: Subject Tabs (2x2 Grid) -->
     <section id="screen-subjects" class="screen">
       <div class="user-greeting">
-        <div>👤 Student: <span id="display-username">Champion</span></div>
-        <div>Pick an Arena 🏆</div>
+        <div>👤 Student: <span id="display-username" style="color:#ffffff;">Champion</span></div>
+        <div>Arena Selection ⚡</div>
       </div>
 
-      <h2 class="header-tag" style="margin-bottom: 2px;">Select a Subject 📚</h2>
-      <p class="subtitle" style="margin-bottom: 8px;">Choose your challenge category today</p>
+      <h2 class="header-tag" style="margin-bottom: 2px;">Select Challenge 📚</h2>
+      <p class="subtitle" style="margin-bottom: 12px;">Choose a subject arena to begin practice</p>
 
       <div class="subject-grid">
         <div class="subject-card card-marathi" onclick="selectSubject('Marathi')">
           <i class="fa-solid fa-feather-pointed"></i>
           <h3>Marathi 🚩</h3>
-          <p style="font-size: 0.75rem; opacity: 0.95;">भाषा व साहित्य</p>
+          <p style="font-size: 0.8rem; opacity: 0.9; margin-top: 2px;">भाषा व साहित्य</p>
         </div>
 
         <div class="subject-card card-english" onclick="selectSubject('English')">
           <i class="fa-solid fa-book-open"></i>
           <h3>English 🔤</h3>
-          <p style="font-size: 0.75rem; opacity: 0.95;">Grammar & Words</p>
+          <p style="font-size: 0.8rem; opacity: 0.9; margin-top: 2px;">Grammar & Vocab</p>
         </div>
 
         <div class="subject-card card-maths" onclick="selectSubject('Maths')">
           <i class="fa-solid fa-calculator"></i>
           <h3>Maths 📐</h3>
-          <p style="font-size: 0.75rem; opacity: 0.95;">Logic & Numbers</p>
+          <p style="font-size: 0.8rem; opacity: 0.9; margin-top: 2px;">Logic & Numbers</p>
         </div>
 
         <div class="subject-card card-gma" onclick="selectSubject('GMA')">
           <i class="fa-solid fa-brain"></i>
           <h3>GMA 💡</h3>
-          <p style="font-size: 0.75rem; opacity: 0.95;">Mental Ability</p>
+          <p style="font-size: 0.8rem; opacity: 0.9; margin-top: 2px;">Mental Ability</p>
         </div>
       </div>
     </section>
@@ -850,11 +939,11 @@
         <span class="badge student-badge" id="student-display-tag">👤 Name</span>
         <span class="badge" id="progress-indicator">📝 Question 1 / 10</span>
         <span class="badge live-score-badge" id="live-score-btn">🏆 Score: 0</span>
-        <span class="badge" id="score-badge" style="background: #fef08a; color: #854d0e;">⭐ Solve</span>
+        <span class="badge" id="score-badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);">⭐ Solve</span>
       </div>
 
       <div class="timer-panel">
-        <span class="timer-text-display" id="timer-text">⏳ Time: 60 Seconds</span>
+        <span class="timer-text-display" id="timer-text">⏳ 60s Remaining</span>
         <div class="timer-track">
           <div class="timer-progress" id="timer-bar"></div>
         </div>
@@ -866,27 +955,27 @@
       <div class="nav-buttons">
         <button class="nav-btn" id="prev-btn" onclick="navigateQuestion(-1)">⬅️ Previous</button>
         <button class="nav-btn" id="next-btn" onclick="navigateQuestion(1)">Next ➡️</button>
-        <button class="nav-btn end-btn end-nav-span" onclick="confirmEndPractice()">🛑 Complete Practice</button>
+        <button class="nav-btn end-btn end-nav-span" onclick="confirmEndPractice()">🛑 Finish Practice</button>
       </div>
     </section>
 
-    <!-- Screen 4: Result & Review Tabs Screen -->
+    <!-- Screen 4: Result & Review Screen -->
     <section id="screen-summary" class="screen">
       <div class="result-box">
-        <h2 id="summary-title">Congratulations! 🎉 Practice is completed.</h2>
+        <h2 id="summary-title">Performance Summary 🏆</h2>
         
         <div class="score-summary-compact">
           <div>
-            <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">STUDENT</span>
-            <div id="result-student-name" style="font-weight: 800; color: #1e293b; font-size: 0.95rem;">-</div>
+            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em;">STUDENT</span>
+            <div id="result-student-name" style="font-weight: 800; color: #ffffff; font-size: 0.98rem; margin-top: 2px;">-</div>
           </div>
           <div>
-            <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">SCORE</span>
+            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em;">SCORE</span>
             <div class="score-digits" id="final-score-text">0 / 0</div>
           </div>
           <div>
-            <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">ACCURACY</span>
-            <div id="sum-accuracy" style="font-weight: 900; color: #ec4899; font-size: 1.1rem;">0%</div>
+            <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em;">ACCURACY</span>
+            <div id="sum-accuracy" style="font-weight: 900; color: #f472b6; font-size: 1.15rem; margin-top: 2px;">0%</div>
           </div>
         </div>
 
@@ -900,8 +989,8 @@
         <!-- Scrollable Questions Review List -->
         <div class="review-list" id="review-list-container"></div>
 
-        <div style="display: flex; gap: 8px; justify-content: center; flex-shrink: 0;">
-          <button class="nav-btn" style="flex: 1;" onclick="switchScreen('screen-subjects')">🔄 Another Arena</button>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-shrink: 0;">
+          <button class="nav-btn" style="flex: 1;" onclick="switchScreen('screen-subjects')">🔄 Switch Arena</button>
           <button class="nav-btn" style="flex: 1;" onclick="location.reload()">🏠 Home</button>
         </div>
       </div>
@@ -912,7 +1001,7 @@
   <!-- Persistent Bottom Footer -->
   <footer>
     <div class="visitor-badge">
-      <span>👀 Total Visitors:</span>
+      <span>👀 Visitors:</span>
       <span id="visitor-count" class="visitor-count-number">...</span>
     </div>
     <div class="credit">
@@ -921,10 +1010,9 @@
   </footer>
 
   <script>
-    /* Google Spreadsheet Base Configuration */
-    const SHEET_BASE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTdL3NfpqkSRPWargMTcQ_qSXOPb64Y5ottEfSEY1ro62Es62B3ow5kYJ6SdkhuCAKskVRi8MQD3zPu/pub?output=csv";
+    const DOC_ID = "2PACX-1vTdL3NfpqkSRPWargMTcQ_qSXOPb64Y5ottEfSEY1ro62Es62B3ow5kYJ6SdkhuCAKskVRi8MQD3zPu";
+    const SHEET_BASE_CSV = `https://docs.google.com/spreadsheets/d/e/${DOC_ID}/pub?output=csv`;
 
-    /* Sheet Tab GIDs */
     const SUBJECT_GIDS = {
       'Marathi': '0',
       'English': '966168279',
@@ -944,7 +1032,17 @@
       activeReviewTab: 'all'
     };
 
-    /* Robust Image & Text Extractor */
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
     function extractImageAndText(rawString) {
       let text = String(rawString || '').trim();
       const imgRegex = /(https?:\/\/(?:i\.ibb\.co|ibb\.co)[^\s]+|https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|webp|gif|svg))/i;
@@ -958,7 +1056,6 @@
       return { hasImage: false, imageUrl: '', cleanText: text };
     }
 
-    /* Lightbox Modal Handlers */
     function openLightbox(imgUrl, e) {
       if (e) e.stopPropagation();
       const modal = document.getElementById('lightbox');
@@ -976,11 +1073,10 @@
       if (e.key === 'Escape') closeLightbox();
     });
 
-    /* Visitor Counter */
     function initVisitorCounter() {
       const visitorElem = document.getElementById('visitor-count');
       if (visitorElem) {
-        const stored = localStorage.getItem('visitor_count') || Math.floor(1240 + Math.random() * 50);
+        const stored = localStorage.getItem('visitor_count') || Math.floor(1840 + Math.random() * 50);
         const updated = Number(stored) + 1;
         visitorElem.innerText = updated.toLocaleString();
         localStorage.setItem('visitor_count', updated);
@@ -988,105 +1084,99 @@
     }
     initVisitorCounter();
 
-    /* Enhanced Web Audio Synthesizer with Clearer Error & Warning Audio */
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    
     function playSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const now = audioCtx.currentTime;
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
 
-      if (type === 'correct') {
-        // Bright cheerful 3-note chime
-        [523.25, 659.25, 783.99].forEach((freq, i) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now + (i * 0.08));
-          gain.gain.setValueAtTime(0, now + (i * 0.08));
-          gain.gain.linearRampToValueAtTime(0.2, now + (i * 0.08) + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.08) + 0.35);
+        if (type === 'correct') {
+          [523.25, 659.25, 783.99].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + (i * 0.08));
+            gain.gain.setValueAtTime(0, now + (i * 0.08));
+            gain.gain.linearRampToValueAtTime(0.2, now + (i * 0.08) + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.08) + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + (i * 0.08));
+            osc.stop(now + (i * 0.08) + 0.35);
+          });
+        } else if (type === 'wrong') {
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc1.type = 'sawtooth';
+          osc2.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(196, now);
+          osc1.frequency.linearRampToValueAtTime(146.83, now + 0.28);
+          osc2.frequency.setValueAtTime(185, now);
+          osc2.frequency.linearRampToValueAtTime(138.59, now + 0.28);
+
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.35);
+          osc2.stop(now + 0.35);
+        } else if (type === 'timeout') {
+          [130.81, 98].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + (i * 0.12));
+            gain.gain.setValueAtTime(0.3, now + (i * 0.12));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.12) + 0.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + (i * 0.12));
+            osc.stop(now + (i * 0.12) + 0.2);
+          });
+        } else if (type === 'tick') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(800, now);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
           osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now + (i * 0.08));
-          osc.stop(now + (i * 0.08) + 0.35);
-        });
-      } else if (type === 'wrong') {
-        // Cartoonish 2-tone descending buzzer (distinct fail sound)
-        const osc1 = audioCtx.createOscillator();
-        const osc2 = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        osc1.type = 'sawtooth';
-        osc2.type = 'sawtooth';
-
-        osc1.frequency.setValueAtTime(196, now); // G3
-        osc1.frequency.linearRampToValueAtTime(146.83, now + 0.28); // D3
-
-        osc2.frequency.setValueAtTime(185, now); // F#3 (dissonance)
-        osc2.frequency.linearRampToValueAtTime(138.59, now + 0.28);
-
-        gain.gain.setValueAtTime(0.22, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-
-        osc1.connect(gain);
-        osc2.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc1.start(now);
-        osc2.start(now);
-        osc1.stop(now + 0.35);
-        osc2.stop(now + 0.35);
-      } else if (type === 'timeout') {
-        // Low double-thud for time running out
-        [130.81, 98].forEach((freq, i) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + (i * 0.12));
-          gain.gain.setValueAtTime(0.3, now + (i * 0.12));
-          gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.12) + 0.2);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(now + (i * 0.12));
-          osc.stop(now + (i * 0.12) + 0.2);
-        });
-      } else if (type === 'tick') {
-        // Subtle warning tick for final 5 seconds
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(800, now);
-        gain.gain.setValueAtTime(0.05, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.04);
-      } else if (type === 'fanfare') {
-        [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, now);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
+          gain.connect(ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.8);
-        });
-      } else {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.06);
+          osc.stop(now + 0.04);
+        } else if (type === 'fanfare') {
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.8);
+          });
+        } else {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        }
+      } catch (err) {
+        // Fallback gracefully if audio policy restricts
       }
     }
 
@@ -1098,17 +1188,17 @@
     document.getElementById('start-app-btn').addEventListener('click', () => {
       const name = document.getElementById('username-input').value.trim();
       if (!name) {
-        alert('Please enter your name to begin ✍️');
+        alert('Please enter your name to enter the arena ✍️');
         return;
       }
       state.userName = name;
       document.getElementById('display-username').textContent = name;
       playSound('click');
-      confetti({ particleCount: 40, spread: 60, origin: { y: 0.8 } });
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
       switchScreen('screen-subjects');
     });
 
-    /* Live Data Fetching */
+    /* Resilient Data Fetching Logic */
     async function selectSubject(subject) {
       state.currentSubject = subject;
       state.userAnswers = {};
@@ -1119,41 +1209,52 @@
       playSound('click');
 
       const gid = SUBJECT_GIDS[subject] || '0';
-      const urlWithGid = `${SHEET_BASE_CSV}&gid=${gid}`;
-      const urlNamedSheet = `${SHEET_BASE_CSV}&sheet=${encodeURIComponent(subject)}`;
-      const urlDefault = `${SHEET_BASE_CSV}`;
+      const endpoints = [
+        `${SHEET_BASE_CSV}&gid=${gid}&single=true`,
+        `${SHEET_BASE_CSV}&gid=${gid}`,
+        `${SHEET_BASE_CSV}&sheet=${encodeURIComponent(subject)}`,
+        SHEET_BASE_CSV
+      ];
 
-      fetchCSV(urlWithGid, subject, () => {
-        fetchCSV(urlNamedSheet, subject, () => {
-          fetchCSV(urlDefault, subject, () => {
-            showLoader(false);
-            alert(`❌ Could not load questions for "${subject}". Please verify your spreadsheet publish settings and column headers.`);
-          });
-        });
-      });
+      let questions = [];
+      for (let url of endpoints) {
+        try {
+          questions = await tryFetchCSV(url);
+          if (questions.length > 0) break;
+        } catch (e) {
+          console.warn(`Fetch failed for ${url}:`, e);
+        }
+      }
+
+      showLoader(false);
+
+      if (questions.length > 0) {
+        state.allQuestions = shuffleArray(questions);
+        switchScreen('screen-quiz');
+        renderQuestion();
+      } else {
+        alert(`❌ Could not load questions for "${subject}". Please verify that your Google Sheet is published to web (File > Share > Publish to web > CSV).`);
+      }
     }
 
-    function fetchCSV(url, subject, onError) {
-      Papa.parse(url, {
-        download: true,
-        header: false,
-        skipEmptyLines: true,
-        complete: function (results) {
-          if (results.data && results.data.length > 1) {
-            const parsed = parseFlexibleRows(results.data);
-            if (parsed.length > 0) {
-              showLoader(false);
-              state.allQuestions = shuffleArray(parsed);
-              switchScreen('screen-quiz');
-              renderQuestion();
-              return;
+    function tryFetchCSV(url) {
+      return new Promise((resolve) => {
+        Papa.parse(url, {
+          download: true,
+          header: false,
+          skipEmptyLines: true,
+          complete: function (results) {
+            if (results.data && results.data.length > 1) {
+              const parsed = parseFlexibleRows(results.data);
+              resolve(parsed);
+            } else {
+              resolve([]);
             }
+          },
+          error: function () {
+            resolve([]);
           }
-          onError();
-        },
-        error: function () {
-          onError();
-        }
+        });
       });
     }
 
@@ -1223,25 +1324,23 @@
       return correctKey;
     }
 
-    /* Render Active Question */
     function renderQuestion() {
       startTimer();
       const currentQ = state.allQuestions[state.currentIndex];
       
       document.getElementById('student-display-tag').innerText = `👤 ${state.userName}`;
-      document.getElementById('progress-indicator').innerText = `📝 Question ${state.currentIndex + 1} / ${state.allQuestions.length}`;
+      document.getElementById('progress-indicator').innerText = `📝 ${state.currentIndex + 1} / ${state.allQuestions.length}`;
       document.getElementById('live-score-btn').innerText = `🏆 Score: ${calculateScore()}`;
 
       const qBox = document.getElementById('question-text');
       const questionIndex = `${state.currentIndex + 1}. `;
       
-      // 1. Render Question Image/Text
       const qData = extractImageAndText(currentQ.Question);
       if (qData.hasImage) {
         qBox.innerHTML = `
           <div style="width: 100%;">
             ${qData.cleanText ? `<div>${questionIndex}${qData.cleanText}</div>` : ''}
-            <div class="img-wrapper" onclick="openLightbox('${qData.imageUrl}', event)" title="Click to zoom in">
+            <div class="img-wrapper" onclick="openLightbox('${qData.imageUrl}', event)" title="Tap to expand">
               <img 
                 src="${qData.imageUrl}" 
                 alt="Question Image" 
@@ -1250,7 +1349,7 @@
                 referrerpolicy="no-referrer"
                 onerror="this.parentElement.style.display='none'"
               />
-              <div class="zoom-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> Tap to Enlarge</div>
+              <div class="zoom-hint"><i class="fa-solid fa-expand"></i> Tap to Enlarge</div>
             </div>
           </div>
         `;
@@ -1258,7 +1357,6 @@
         qBox.innerText = `${questionIndex}${currentQ.Question}`;
       }
 
-      // 2. Render Option Buttons
       const container = document.getElementById('options-container');
       container.innerHTML = '';
 
@@ -1269,19 +1367,22 @@
       if (selected) {
         if (selected === "TIMEOUT") {
           badge.innerText = "⏰ Time Out!";
-          badge.style.background = "#fee2e2";
-          badge.style.color = "#b91c1c";
+          badge.style.background = "rgba(239, 68, 68, 0.2)";
+          badge.style.color = "#f87171";
+          badge.style.borderColor = "rgba(239, 68, 68, 0.4)";
         } else {
           let correctKey = getCleanCorrectKey(currentQ);
           const isRight = selected === correctKey;
-          badge.innerText = isRight ? "🎉 Correct Answer!" : "❌ Incorrect Answer!";
-          badge.style.background = isRight ? "#dcfce7" : "#fee2e2";
-          badge.style.color = isRight ? "#15803d" : "#b91c1c";
+          badge.innerText = isRight ? "🎉 Correct!" : "❌ Incorrect!";
+          badge.style.background = isRight ? "rgba(16, 185, 129, 0.2)" : "rgba(239, 68, 68, 0.2)";
+          badge.style.color = isRight ? "#4ade80" : "#f87171";
+          badge.style.borderColor = isRight ? "rgba(16, 185, 129, 0.4)" : "rgba(239, 68, 68, 0.4)";
         }
       } else {
         badge.innerText = "⭐ Solve";
-        badge.style.background = "#fef08a";
-        badge.style.color = "#854d0e";
+        badge.style.background = "rgba(245, 158, 11, 0.2)";
+        badge.style.color = "#fbbf24";
+        badge.style.borderColor = "rgba(245, 158, 11, 0.4)";
       }
 
       keys.forEach(key => {
@@ -1305,12 +1406,12 @@
                   loading="lazy" 
                   referrerpolicy="no-referrer"
                 />
-                <div class="opt-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+                <div class="opt-zoom-icon"><i class="fa-solid fa-expand"></i></div>
               </div>
             </div>
           `;
         } else {
-          contentHtml = `<span><strong style="color:#4338ca;">(${key})</strong> ${optData.cleanText}</span>`;
+          contentHtml = `<span><strong style="color:#818cf8; margin-right:4px;">(${key})</strong> ${optData.cleanText}</span>`;
         }
         btn.innerHTML = contentHtml;
 
@@ -1320,10 +1421,10 @@
 
           if (key === correctKey) {
             btn.classList.add('correct');
-            btn.innerHTML += `<span style="margin-left:6px; font-weight:bold;">✔️</span>`;
+            btn.innerHTML += `<span style="margin-left:8px; font-weight:bold;">✔️</span>`;
           } else if (key === selected) {
             btn.classList.add('wrong');
-            btn.innerHTML += `<span style="margin-left:6px; font-weight:bold;">❌</span>`;
+            btn.innerHTML += `<span style="margin-left:8px; font-weight:bold;">❌</span>`;
           }
         } else {
           btn.onclick = () => handleAnswerSelect(key);
@@ -1355,7 +1456,7 @@
 
       if (selectedKey === correctOption) {
         playSound('correct');
-        confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+        confetti({ particleCount: 60, spread: 70, origin: { y: 0.7 } });
       } else {
         playSound('wrong');
       }
@@ -1386,15 +1487,14 @@
       }
 
       state.timeLeft = 60;
-      document.getElementById('timer-text').innerText = `⏳ Time: ${state.timeLeft} Seconds`;
+      document.getElementById('timer-text').innerText = `⏳ ${state.timeLeft}s Remaining`;
       document.getElementById('timer-bar').style.width = "100%";
 
       state.timer = setInterval(() => {
         state.timeLeft--;
-        document.getElementById('timer-text').innerText = `⏳ Time: ${Math.max(0, state.timeLeft)} Seconds`;
+        document.getElementById('timer-text').innerText = `⏳ ${Math.max(0, state.timeLeft)}s Remaining`;
         document.getElementById('timer-bar').style.width = `${Math.max(0, (state.timeLeft / 60) * 100)}%`;
 
-        // Warning tick on final 5 seconds
         if (state.timeLeft <= 5 && state.timeLeft > 0) {
           playSound('tick');
         }
@@ -1415,7 +1515,6 @@
       }, 1000);
     }
 
-    /* Result Calculation & Review Renderer */
     function confirmEndPractice() {
       clearInterval(state.timer);
       const totalScore = calculateScore();
@@ -1428,10 +1527,9 @@
 
       playSound('fanfare');
       if (accuracy >= 80) {
-        confetti({ particleCount: 140, spread: 90, origin: { y: 0.6 } });
+        confetti({ particleCount: 160, spread: 100, origin: { y: 0.6 } });
       }
 
-      // Count totals for tab badges
       let rightCount = 0;
       let wrongCount = 0;
       state.allQuestions.forEach((q, idx) => {
@@ -1481,10 +1579,10 @@
 
         item.innerHTML = `
           <div class="review-q-title">Q${idx + 1}. ${qData.cleanText || 'Question Image'}</div>
-          ${qData.hasImage ? `<img src="${qData.imageUrl}" style="max-height:60px; object-fit:contain; border-radius:4px; margin-bottom:4px;" loading="lazy" />` : ''}
+          ${qData.hasImage ? `<img src="${qData.imageUrl}" style="max-height:60px; object-fit:contain; border-radius:6px; margin-bottom:6px; background:#0f172a; padding:2px; border:1px solid rgba(255,255,255,0.15);" loading="lazy" />` : ''}
           <div class="review-ans-info">
-            <span><strong>Your Answer:</strong> <span style="color:${isRight ? '#15803d' : '#b91c1c'}; font-weight:bold;">${selected}</span></span>
-            <span><strong>Correct Answer:</strong> <span style="color:#15803d; font-weight:bold;">${correct}</span></span>
+            <span><strong>Your Answer:</strong> <span style="color:${isRight ? '#4ade80' : '#f87171'}; font-weight:bold;">${selected}</span></span>
+            <span><strong>Correct Answer:</strong> <span style="color:#4ade80; font-weight:bold;">${correct}</span></span>
           </div>
         `;
 
@@ -1492,7 +1590,7 @@
       });
 
       if (container.children.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px; font-weight:600;">No questions in this section!</div>`;
+        container.innerHTML = `<div style="text-align:center; color:#94a3b8; padding:24px; font-weight:600;">No questions in this category!</div>`;
       }
     }
   </script>
