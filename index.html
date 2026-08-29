@@ -682,19 +682,29 @@
       solvedSet: new Set()
     };
 
-    /* Helper function to extract text and ImgBB image URL */
-    function extractImageAndText(rawString) {
-      const text = String(rawString || '').trim();
-      const imgRegex = /(https?:\/\/(?:i\.ibb\.co|ibb\.co)[^\s]+|https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|webp|gif|svg))/i;
-      const match = text.match(imgRegex);
+  /* Updated Helper to handle direct ImgBB and clean broken thumbnails */
+function extractImageAndText(rawString) {
+  let text = String(rawString || '').trim();
+  
+  // Regex to detect both viewer links (ibb.co) and direct links (i.ibb.co / image extensions)
+  const imgRegex = /(https?:\/\/(?:i\.ibb\.co|ibb\.co)[^\s]+|https?:\/\/[^\s]+?\.(?:jpg|jpeg|png|webp|gif|svg))/i;
+  const match = text.match(imgRegex);
 
-      if (match) {
-        const imageUrl = match[0];
-        const cleanText = text.replace(imageUrl, '').trim();
-        return { hasImage: true, imageUrl, cleanText };
-      }
-      return { hasImage: false, imageUrl: '', cleanText: text };
-    }
+  if (match) {
+    let imageUrl = match[0];
+    const cleanText = text.replace(imageUrl, '').trim();
+
+    // Clean up trailing punctuation if any
+    imageUrl = imageUrl.replace(/[),;.]+$/, '');
+
+    return { 
+      hasImage: true, 
+      imageUrl: imageUrl, 
+      cleanText: cleanText 
+    };
+  }
+  return { hasImage: false, imageUrl: '', cleanText: text };
+}
 
     /* Visitor Counter */
     function initVisitorCounter() {
